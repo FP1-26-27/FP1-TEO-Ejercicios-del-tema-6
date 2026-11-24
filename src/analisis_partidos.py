@@ -99,8 +99,7 @@ def obten_torneos(partidos: list[Partido]) -> set[str]:
     Devuelve:
     set[str]: Conjunto de torneos distintos.
     """
-    # TODO: Ejercicio 1
-    pass
+    return {p.tournament for p in partidos}
 
 def busca_partido_con_mas_goles(partidos: list[Partido], torneo: str) -> Partido | None:
     """
@@ -114,8 +113,10 @@ def busca_partido_con_mas_goles(partidos: list[Partido], torneo: str) -> Partido
     Devuelve:
     Partido | None: Partido con más goles del torneo, o None si no hay partidos de ese torneo.
     """
-    # TODO: Ejercicio 2
-    pass
+    partidos_del_torneo = (p for p in partidos if p.tournament == torneo)
+    return max(partidos_del_torneo, 
+               key=lambda p:p.home_score+p.away_score, 
+               default=None)
 
 def busca_ultimos_partidos_de_seleccion(partidos: list[Partido], seleccion: str) -> list[Partido]:
     """
@@ -130,8 +131,18 @@ def busca_ultimos_partidos_de_seleccion(partidos: list[Partido], seleccion: str)
     Devuelve:
     list[Partido]: Lista con los últimos 5 partidos de la selección.
     """
-    # TODO: Ejercicio 3
-    pass
+    # Filtrar los partidos de la seleccion
+    #partidos_seleccion = (p for p in partidos if p.home_team==seleccion or p.away_team==seleccion)
+    # partidos_seleccion = (p for p in partidos if juega(p, seleccion))
+
+    # Ordenar los partidos por fecha (de menor a mayor)
+    #ordenados = sorted(partidos_seleccion)
+
+    # Devolver los 5 últimos
+    # return ordenados[-5:]
+
+    # O se puede hacer todo en una sola instrucción
+    return sorted(p for p in partidos if juega(p, seleccion))[-5:]
 
 def calcula_goles_marcados(partidos: list[Partido], seleccion: str) -> int:
     """
@@ -145,8 +156,12 @@ def calcula_goles_marcados(partidos: list[Partido], seleccion: str) -> int:
     Devuelve:
     int: Total de goles marcados por la selección.
     """
-    # TODO: Ejercicio 4
-    pass
+    #goles_como_local = sum(p.home_score for p in partidos if p.home_team == seleccion) 
+    #goles_como_visitante = sum(p.away_score for p in partidos if p.away_team == seleccion) 
+    #return goles_como_local + goles_como_visitante
+
+    # Si usamos las funciones auxiliares que definimos al principio:
+    return sum(goles_a_favor(p, seleccion) for p in partidos if juega(p, seleccion))
 
 def calcula_goles_marcados_2(partidos: list[Partido], seleccion: str) -> int:
     """
